@@ -1,0 +1,35 @@
+class Solution {
+public:
+    void DFS(unordered_map<string, vector<string>>& g, string from, vector<string>& ans) {
+        if (g.find(from) != g.end()) {
+            while (g[from].size()>0) {
+                string node = g[from].back();
+                g[from].pop_back();
+                DFS(g, node, ans);
+            }
+        }
+        ans.push_back(from);
+    }
+
+    vector<string> findItinerary(vector<vector<string>>& tickets) {
+        unordered_map<string, vector<string>> g;
+        vector<string> ans;
+
+        for (int i =0;i<tickets.size();i++) {
+            string from = tickets[i][0];
+            string to = tickets[i][1];
+            g[from].push_back(to);
+        }
+
+        for (auto& entry : g) {
+            sort(entry.second.rbegin(), entry.second.rend());
+        }
+
+        ans.push_back("JFK");
+        DFS(g, "JFK", ans);
+
+        reverse(ans.begin(), ans.end());
+        ans.pop_back();
+        return ans;
+    }
+};
