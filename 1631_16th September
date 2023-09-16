@@ -1,0 +1,43 @@
+class Solution {
+public:
+    bool dfs(int i, int j, int mid, int m, int n, vector<vector<int>>& heights, int vis[101][101] ){
+        if(i==m-1 && j ==n-1){
+            return true;
+        }
+            vis[i][j]=1;
+            bool flag = false;
+            if(i>0 && vis[i-1][j]==0 && abs(heights[i][j]-heights[i-1][j])<=mid){
+                flag = flag || dfs(i-1,j,mid,m,n,heights,vis);
+            }
+            if(j>0 && vis[i][j-1]==0 && abs(heights[i][j]-heights[i][j-1])<=mid){
+                flag = flag || dfs(i,j-1,mid,m,n,heights,vis);
+            }
+            if(i<m-1 && vis[i+1][j]==0 && abs(heights[i+1][j]-heights[i][j])<=mid){
+                flag = flag || dfs(i+1,j,mid,m,n,heights,vis);
+            }
+            if(j<n-1 && vis[i][j+1]==0 && abs(heights[i][j+1]-heights[i][j])<=mid){
+                flag = flag || dfs(i,j+1,mid,m,n,heights,vis);
+            }
+            
+            return flag;
+    }
+    int minimumEffortPath(vector<vector<int>>& heights) {
+        int mi = 0; int ma = 1e6, ans = 1e6;
+        int n = heights[0].size();
+        int m = heights.size();
+        while(mi<=ma){
+            int mid = mi + (ma-mi)/2;
+            int vis[101][101];
+            memset(vis,0,sizeof(vis));
+            if(dfs(0,0,mid,m,n,heights,vis)){
+                ans = min(ans,mid);
+                ma = mid-1;
+            }
+            else{
+                mi = mid+1;
+            }
+        }
+        return ans;
+    }
+    
+};
