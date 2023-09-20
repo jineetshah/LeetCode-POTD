@@ -1,0 +1,34 @@
+class Solution {
+public:
+    int minOperations(vector<int>& nums, int x) {
+        int sum = 0;
+
+        for(int i =0;i<nums.size();i++){
+            sum+=nums[i];
+        }
+
+        int k = sum - x;
+
+        int left = 0, mlength=0, right=0, csum =0;
+
+        if(k==0){
+            return nums.size();
+        }
+
+        for(right = 0; right<nums.size();right++){
+            csum+=nums[right];
+            while(left<=right && csum>k){
+                csum -= nums[left];
+                left ++;
+            }
+            if(csum == k){
+                mlength = max(mlength, right-left+1);
+            }
+        }
+        if(mlength>0){
+            return nums.size()-mlength;
+        }
+        return -1;
+        
+    }
+};
